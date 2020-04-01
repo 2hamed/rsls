@@ -4,6 +4,7 @@ pub trait DirEntryPrinter {
     fn print(&self);
 }
 
+#[derive(Debug)]
 pub struct Node {
     dir_entry: DirEntry,
 }

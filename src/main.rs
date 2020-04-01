@@ -21,12 +21,14 @@ fn main() {
     }
     let mut nodes: Vec<Node> = Vec::new();
 
-    for e in dir_entry {
-        match e {
-            Err(_e) => println!("There was an error reading the directory {}", e.to_string()),
+    for entry in dir_entry {
+        match entry {
+            Err(e) => println!("There was an error reading the directory {:?}", e),
             Ok(v) => nodes.push(Node::new(v)),
         }
     }
+
+    println!("{:?}", nodes);
 }
 
 fn get_current_dir() -> Result<String, io::Error> {
