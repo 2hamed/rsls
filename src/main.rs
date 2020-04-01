@@ -1,4 +1,6 @@
-use std::os::unix::fs::PermissionsExt;
+mod printer;
+
+use printer::Node;
 use std::{env, fs, io};
 
 fn main() {
@@ -12,16 +14,17 @@ fn main() {
     };
 
     let abs_path = determine_abs_path(&path[..], &get_current_dir().unwrap()[..]);
-
+    let dir_entry;
     match fs::read_dir(abs_path) {
         Err(e) => panic!("{}", e),
-        Ok(dir) => {
-            for f in dir {
-                match f {
-                    Ok(entry) => println!("{:o}", entry.metadata().unwrap().permissions().mode()),
-                    Err(e) => panic!("{}", e),
-                }
-            }
+        Ok(dir) => dir_entry = dir,
+    }
+    let mut nodes: Vec<Node> = Vec::new();
+
+    for e in dir_entry {
+        match e {
+            Err(_e) => println!("There was an error reading the directory {}", e.to_string()),
+            Ok(v) => nodes.push(Node::new(v)),
         }
     }
 }
